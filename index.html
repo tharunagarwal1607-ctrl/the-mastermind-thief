@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="The Mastermind Thief - A professional stealth strategy game where you plan and execute daring heists across 5 increasingly challenging levels.">
-    <title>The Mastermind Thief | Stealth Strategy Game</title>
+    <meta name="description" content="The Mastermind Thief - High-speed 2D action side-scroller.">
+    <title>The Mastermind Thief | Action Platformer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- INTRO SCREEN -->
     <div id="intro-screen" class="screen active">
         <div id="intro-content">
-            <img id="team-logo" src="" alt="Tharun & Team" style="display:none;">
             <canvas id="logo-canvas" width="600" height="400"></canvas>
             <div id="intro-subtitle">PRESENTS</div>
         </div>
@@ -22,252 +21,141 @@
 
     <!-- TITLE SCREEN -->
     <div id="title-screen" class="screen">
-        <div class="title-bg-effects">
-            <div class="floating-particle" style="--delay:0s;--x:20%;--y:30%"></div>
-            <div class="floating-particle" style="--delay:1s;--x:70%;--y:20%"></div>
-            <div class="floating-particle" style="--delay:2s;--x:40%;--y:60%"></div>
-            <div class="floating-particle" style="--delay:3s;--x:80%;--y:70%"></div>
-            <div class="floating-particle" style="--delay:4s;--x:15%;--y:80%"></div>
-            <div class="floating-particle" style="--delay:0.5s;--x:55%;--y:15%"></div>
-            <div class="floating-particle" style="--delay:1.5s;--x:90%;--y:45%"></div>
-            <div class="floating-particle" style="--delay:2.5s;--x:30%;--y:90%"></div>
-        </div>
+        <div class="title-bg"></div>
+        <div class="particles"></div>
         <div id="title-content">
             <div id="game-title">
-                <span class="title-the">THE</span>
-                <span class="title-main">MASTERMIND</span>
+                <span class="title-main">THE MASTERMIND</span>
                 <span class="title-thief">THIEF</span>
+                <span class="title-action">ACTION RUNNER</span>
             </div>
-            <div id="title-tagline">Intelligence is the greatest weapon</div>
+            
             <div id="title-menu">
-                <button class="menu-btn" id="btn-new-game" onclick="game.startNewGame()">
-                    <span class="btn-icon">▶</span>
-                    <span class="btn-text">NEW GAME</span>
-                </button>
-                <button class="menu-btn" id="btn-level-select" onclick="game.showLevelSelect()">
-                    <span class="btn-icon">◈</span>
-                    <span class="btn-text">LEVEL SELECT</span>
-                </button>
-                <button class="menu-btn" id="btn-skills" onclick="game.showSkillsMenu()">
-                    <span class="btn-icon">⬆</span>
-                    <span class="btn-text">UPGRADES</span>
-                </button>
-                <button class="menu-btn" id="btn-how-to-play" onclick="game.showHowToPlay()">
-                    <span class="btn-icon">?</span>
-                    <span class="btn-text">HOW TO PLAY</span>
-                </button>
+                <button class="menu-btn primary" onclick="game.startNewGame()">PLAY NOW</button>
+                <button class="menu-btn" onclick="game.showLevelSelect()">MISSIONS</button>
+                <button class="menu-btn" onclick="game.showUpgrades()">UPGRADES</button>
+                <button class="menu-btn" onclick="game.showHowToPlay()">CONTROLS</button>
             </div>
         </div>
     </div>
 
-    <!-- LEVEL SELECT SCREEN -->
+    <!-- LEVEL SELECT -->
     <div id="level-select-screen" class="screen">
-        <div class="screen-header">
-            <button class="back-btn" onclick="game.showTitle()">← BACK</button>
-            <h1>SELECT MISSION</h1>
+        <div class="header">
+            <button class="back-btn" onclick="game.showTitle()">BACK</button>
+            <h2>MISSIONS</h2>
+            <div class="coins-display">💰 <span id="total-coins">0</span></div>
         </div>
         <div id="level-cards"></div>
     </div>
 
-    <!-- HOW TO PLAY SCREEN -->
-    <div id="howtoplay-screen" class="screen">
-        <div class="screen-header">
-            <button class="back-btn" onclick="game.showTitle()">← BACK</button>
-            <h1>HOW TO PLAY</h1>
+    <!-- UPGRADES -->
+    <div id="upgrades-screen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="game.showTitle()">BACK</button>
+            <h2>UPGRADES</h2>
+            <div class="coins-display">💰 <span id="upgrade-coins">0</span></div>
         </div>
-        <div id="howtoplay-content">
-            <div class="htp-section">
-                <h2>🎮 CONTROLS</h2>
-                <div class="controls-grid">
-                    <div class="control-item"><kbd>W A S D</kbd><span>Move</span></div>
-                    <div class="control-item"><kbd>SHIFT</kbd><span>Sneak (reduces noise)</span></div>
-                    <div class="control-item"><kbd>E</kbd><span>Interact / Pick up</span></div>
-                    <div class="control-item"><kbd>SPACE</kbd><span>Hide (near cover)</span></div>
-                    <div class="control-item"><kbd>1-4</kbd><span>Use inventory item</span></div>
-                    <div class="control-item"><kbd>ESC</kbd><span>Pause</span></div>
-                </div>
-            </div>
-            <div class="htp-section">
-                <h2>🕵️ STEALTH MECHANICS</h2>
-                <ul>
-                    <li><strong>Stay in shadows</strong> — Avoid lit areas and guard vision cones</li>
-                    <li><strong>Move slowly</strong> — Hold SHIFT to sneak and reduce noise</li>
-                    <li><strong>Use cover</strong> — Hide behind objects to avoid detection</li>
-                    <li><strong>Plan your route</strong> — Multiple paths exist in every level</li>
-                </ul>
-            </div>
-            <div class="htp-section">
-                <h2>🎒 ITEMS</h2>
-                <div class="items-grid">
-                    <div class="item-info"><span class="item-icon">🔓</span><span>Lockpick — Open locked doors</span></div>
-                    <div class="item-info"><span class="item-icon">💨</span><span>Smoke Bomb — Create visual cover</span></div>
-                    <div class="item-info"><span class="item-icon">⚡</span><span>EMP — Disable cameras & electronics</span></div>
-                    <div class="item-info"><span class="item-icon">🎭</span><span>Disguise — Reduce detection rate</span></div>
-                </div>
-            </div>
-        </div>
+        <div id="upgrades-grid"></div>
     </div>
 
-    <!-- SKILLS/UPGRADES SCREEN -->
-    <div id="skills-screen" class="screen">
-        <div class="screen-header">
-            <button class="back-btn" onclick="game.showTitle()">← BACK</button>
-            <h1>SKILL UPGRADES</h1>
-            <div id="skill-points-display">SKILL POINTS: <span id="skill-points-value">0</span></div>
+    <!-- HOW TO PLAY -->
+    <div id="howtoplay-screen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="game.showTitle()">BACK</button>
+            <h2>CONTROLS</h2>
         </div>
-        <div id="skills-grid"></div>
+        <div class="htp-content">
+            <div class="htp-card">
+                <h3>⌨️ KEYBOARD</h3>
+                <div class="control-row"><kbd>W</kbd> or <kbd>↑</kbd> <span>JUMP / DOUBLE JUMP</span></div>
+                <div class="control-row"><kbd>S</kbd> or <kbd>↓</kbd> <span>SLIDE</span></div>
+                <div class="control-row"><kbd>SPACE</kbd> <span>SHOOT</span></div>
+                <div class="control-row"><kbd>ESC</kbd> <span>PAUSE</span></div>
+            </div>
+            <div class="htp-card">
+                <h3>🎮 GAMEPLAY</h3>
+                <ul>
+                    <li>The thief runs automatically.</li>
+                    <li>Avoid lasers, spikes, and gaps.</li>
+                    <li>Shoot guards before they shoot you.</li>
+                    <li>Collect coins to buy upgrades.</li>
+                    <li>Reach the getaway van to complete the mission!</li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <!-- GAME SCREEN -->
     <div id="game-screen" class="screen">
-        <!-- Game Canvas -->
         <canvas id="game-canvas"></canvas>
 
-        <!-- HUD -->
         <div id="hud">
-            <div id="hud-top">
-                <div id="hud-level-info">
-                    <div id="hud-level-name">LEVEL 1</div>
-                    <div id="hud-objective">Steal the cash and escape</div>
+            <div class="hud-top">
+                <div class="health-bar-container">
+                    <div class="health-bar-bg"></div>
+                    <div id="health-bar-fill" class="health-bar-fill"></div>
+                    <div class="health-icon">❤️</div>
                 </div>
-                <div id="hud-timer" style="display:none;">
-                    <span id="timer-icon">⏱</span>
-                    <span id="timer-value">02:00</span>
+                
+                <div class="score-container">
+                    <span class="score-label">DISTANCE</span>
+                    <span id="distance-value">0m</span>
                 </div>
-                <div id="hud-alert-status">
-                    <div id="alert-icon">👁</div>
-                    <div id="alert-text">HIDDEN</div>
-                </div>
-            </div>
-
-            <div id="hud-left">
-                <div class="meter-container">
-                    <div class="meter-label">DETECTION</div>
-                    <div class="meter-bar">
-                        <div id="detection-fill" class="meter-fill detection"></div>
-                    </div>
-                </div>
-                <div class="meter-container">
-                    <div class="meter-label">NOISE</div>
-                    <div class="meter-bar">
-                        <div id="noise-fill" class="meter-fill noise"></div>
-                    </div>
+                
+                <div class="coin-container">
+                    <span class="coin-icon">💰</span>
+                    <span id="hud-coins">0</span>
                 </div>
             </div>
 
-            <div id="hud-bottom">
-                <div id="inventory-bar">
-                    <div class="inv-slot" id="inv-slot-1" data-key="1">
-                        <div class="inv-icon"></div>
-                        <div class="inv-count"></div>
-                        <div class="inv-key">1</div>
-                    </div>
-                    <div class="inv-slot" id="inv-slot-2" data-key="2">
-                        <div class="inv-icon"></div>
-                        <div class="inv-count"></div>
-                        <div class="inv-key">2</div>
-                    </div>
-                    <div class="inv-slot" id="inv-slot-3" data-key="3">
-                        <div class="inv-icon"></div>
-                        <div class="inv-count"></div>
-                        <div class="inv-key">3</div>
-                    </div>
-                    <div class="inv-slot" id="inv-slot-4" data-key="4">
-                        <div class="inv-icon"></div>
-                        <div class="inv-count"></div>
-                        <div class="inv-key">4</div>
-                    </div>
-                </div>
-                <div id="interact-prompt" style="display:none;">
-                    Press <kbd>E</kbd> to <span id="interact-action">interact</span>
-                </div>
-            </div>
-
-            <!-- Mini-map -->
-            <div id="minimap-container">
-                <canvas id="minimap-canvas" width="160" height="160"></canvas>
-            </div>
-        </div>
-
-        <!-- MINI-GAME OVERLAY -->
-        <div id="minigame-overlay" style="display:none;">
-            <div id="minigame-container">
-                <div id="minigame-title">HACK THE ALARM</div>
-                <canvas id="minigame-canvas" width="500" height="400"></canvas>
-                <div id="minigame-instructions"></div>
-                <div id="minigame-timer-bar">
-                    <div id="minigame-timer-fill"></div>
+            <!-- Mobile Controls (hidden on desktop) -->
+            <div id="mobile-controls">
+                <div class="mobile-btn" id="btn-slide">⬇️ SLIDE</div>
+                <div class="mobile-right">
+                    <div class="mobile-btn" id="btn-shoot">🎯 FIRE</div>
+                    <div class="mobile-btn" id="btn-jump">⬆️ JUMP</div>
                 </div>
             </div>
         </div>
 
-        <!-- PAUSE MENU -->
-        <div id="pause-overlay" style="display:none;">
-            <div id="pause-menu">
+        <div id="pause-overlay" class="overlay">
+            <div class="menu-box">
                 <h2>PAUSED</h2>
-                <button class="menu-btn" onclick="game.resumeGame()">
-                    <span class="btn-icon">▶</span><span class="btn-text">RESUME</span>
-                </button>
-                <button class="menu-btn" onclick="game.restartLevel()">
-                    <span class="btn-icon">↺</span><span class="btn-text">RESTART</span>
-                </button>
-                <button class="menu-btn" onclick="game.quitToMenu()">
-                    <span class="btn-icon">✕</span><span class="btn-text">QUIT</span>
-                </button>
+                <button class="menu-btn" onclick="game.resumeGame()">RESUME</button>
+                <button class="menu-btn" onclick="game.restartLevel()">RESTART</button>
+                <button class="menu-btn" onclick="game.quitToMenu()">QUIT</button>
             </div>
         </div>
-
-        <!-- MESSAGE POPUP -->
-        <div id="game-message" style="display:none;">
-            <div id="message-content"></div>
+        
+        <div id="message-overlay" class="overlay-msg">
+            <h2 id="msg-text"></h2>
         </div>
     </div>
 
-    <!-- LEVEL COMPLETE SCREEN -->
+    <!-- LEVEL COMPLETE -->
     <div id="complete-screen" class="screen">
-        <div id="complete-content">
-            <div id="complete-icon">✓</div>
-            <h1 id="complete-title">MISSION COMPLETE</h1>
-            <div id="complete-stats">
-                <div class="stat-row"><span>Time</span><span id="stat-time">--:--</span></div>
-                <div class="stat-row"><span>Detection Alerts</span><span id="stat-alerts">0</span></div>
-                <div class="stat-row"><span>Items Used</span><span id="stat-items">0</span></div>
-                <div class="stat-row"><span>Loot Collected</span><span id="stat-loot">$0</span></div>
+        <div class="menu-box">
+            <h2 class="success-text">MISSION COMPLETE!</h2>
+            <div class="stats-box">
+                <div class="stat"><span class="label">Coins Gathered:</span> <span id="stat-coins" class="val">0</span></div>
+                <div class="stat"><span class="label">Enemies Defeated:</span> <span id="stat-kills" class="val">0</span></div>
             </div>
-            <div id="complete-rating">
-                <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-            </div>
-            <div id="complete-reward">
-                SKILL POINTS EARNED: <span id="reward-points">0</span>
-            </div>
-            <div id="complete-buttons">
-                <button class="menu-btn" onclick="game.nextLevel()">
-                    <span class="btn-icon">▶</span><span class="btn-text">NEXT MISSION</span>
-                </button>
-                <button class="menu-btn" onclick="game.restartLevel()">
-                    <span class="btn-icon">↺</span><span class="btn-text">REPLAY</span>
-                </button>
-                <button class="menu-btn" onclick="game.quitToMenu()">
-                    <span class="btn-icon">◈</span><span class="btn-text">MENU</span>
-                </button>
-            </div>
+            <button class="menu-btn primary" onclick="game.nextLevel()">NEXT MISSION</button>
+            <button class="menu-btn" onclick="game.showLevelSelect()">MISSIONS</button>
         </div>
     </div>
 
-    <!-- GAME OVER SCREEN -->
+    <!-- GAME OVER -->
     <div id="gameover-screen" class="screen">
-        <div id="gameover-content">
-            <div id="gameover-icon">✕</div>
-            <h1 id="gameover-title">MISSION FAILED</h1>
-            <div id="gameover-reason">You were caught by a guard!</div>
-            <div id="gameover-buttons">
-                <button class="menu-btn" onclick="game.restartLevel()">
-                    <span class="btn-icon">↺</span><span class="btn-text">RETRY</span>
-                </button>
-                <button class="menu-btn" onclick="game.quitToMenu()">
-                    <span class="btn-icon">◈</span><span class="btn-text">MENU</span>
-                </button>
+        <div class="menu-box">
+            <h2 class="danger-text">WASTED</h2>
+            <p id="gameover-reason" class="reason">You fell into a gap.</p>
+            <div class="stats-box">
+                <div class="stat"><span class="label">Distance:</span> <span id="fail-dist" class="val">0m</span></div>
             </div>
+            <button class="menu-btn primary" onclick="game.restartLevel()">TRY AGAIN</button>
+            <button class="menu-btn" onclick="game.showTitle()">MENU</button>
         </div>
     </div>
 
